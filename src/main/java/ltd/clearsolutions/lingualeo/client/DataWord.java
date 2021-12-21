@@ -3,11 +3,14 @@ package ltd.clearsolutions.lingualeo.client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TranslatedWord(
-        Integer id,
-        String value,
-        Integer votes,
+public record DataWord(
+        @SerializedName("error_msg")
+        String errorMsg,
         @SerializedName("is_user")
-        Integer isUser) {
+        Integer isUser,
+        List<TranslatedWord> translate,
+        String transcription) {
 }
