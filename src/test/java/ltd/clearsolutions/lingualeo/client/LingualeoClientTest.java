@@ -51,7 +51,7 @@ class LingualeoClientTest {
                     "hasMap": 1,
                     "hungry_max_points": 150,
                     "hungry_pct": 2,
-                    "hungry_points": 3,
+                    "hungry_points": 4,
                     "is_gold": false,
                     "is_hold": false,
                     "lang_interface": "ru",
@@ -76,12 +76,12 @@ class LingualeoClientTest {
                     "user_id": 43211767,
                     "welcomeLevel": -1,
                     "welcomeLevelName": "",
-                    "words_cnt": 0,
+                    "words_cnt": 1,
                     "words_known": 0,
                     "xp_level": 2,
                     "xp_max_points": 50,
                     "xp_min_points": 26,
-                    "xp_points": 27,
+                    "xp_points": 28,
                     "xp_title": "Ловкий новичок"
                   }
                 }""";
