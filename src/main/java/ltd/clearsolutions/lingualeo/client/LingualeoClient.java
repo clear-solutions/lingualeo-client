@@ -17,24 +17,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LingualeoClient implements ApiClient {
 
-    private static final String API_URL = "https://api.lingualeo.com/";
+    private final String API_URL = "https://api.lingualeo.com/";
 
-    private static String login;
-    private static String password;
+    private final String email;
+    private final String password;
 
+    private static final Logger logger = Logger.getLogger(LingualeoClient.class.getName());
 
-    public LingualeoClient(String login, String password) {
-        LingualeoClient.login = login;
-        LingualeoClient.password = password;
+    public LingualeoClient(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     @Override
     public Map<String, Object> auth() {
 
-        String urlParameters = "email=" + login + "&password=" + password;
+        String urlParameters = "email=" + email + "&password=" + password;
         String requestUrl = API_URL + "login" + "?" + urlParameters;
 
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
@@ -48,9 +51,8 @@ public class LingualeoClient implements ApiClient {
                     new TypeReference<HashMap<String, Object>>() {
                     });
 
-        } catch (
-                IOException e) {
-            e.getStackTrace();
+        } catch (IOException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return Collections.emptyMap();
     }
@@ -71,28 +73,26 @@ public class LingualeoClient implements ApiClient {
 
             return dataWord.translate();
 
-        } catch (
-                IOException | ParseException e) {
-            e.getStackTrace();
+        } catch (IOException | ParseException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
         return Collections.emptyList();
     }
 
     @Override
     public void addWord(String word, String translate, String context) {
-        String urlParameters = "word=" + URLEncoder.encode(word, StandardCharsets.UTF_8) +
-                "&tword=" + URLEncoder.encode(translate, StandardCharsets.UTF_8) +
-                "&context=" + URLEncoder.encode(context, StandardCharsets.UTF_8);
+        String urlParameters =
+                "word=" + URLEncoder.encode(word, StandardCharsets.UTF_8) +
+                        "&tword=" + URLEncoder.encode(translate, StandardCharsets.UTF_8) +
+                        "&context=" + URLEncoder.encode(context, StandardCharsets.UTF_8);
 
         String requestUrl = API_URL + "addword?" + urlParameters;
 
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             client.execute(new HttpPost(requestUrl));
 
-        } catch (
-                IOException e) {
-            e.getStackTrace();
+        } catch (IOException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
-
 }
