@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class LingualeoClient implements ApiClient {
 
-    private final String API_URL = "https://api.lingualeo.com/";
+    private static final String API_URL = "https://api.lingualeo.com/";
 
     private final String email;
     private final String password;
@@ -80,11 +80,10 @@ public class LingualeoClient implements ApiClient {
     }
 
     @Override
-    public void addWord(String word, String translate, String context) {
-        String urlParameters =
-                "word=" + URLEncoder.encode(word, StandardCharsets.UTF_8) +
-                        "&tword=" + URLEncoder.encode(translate, StandardCharsets.UTF_8) +
-                        "&context=" + URLEncoder.encode(context, StandardCharsets.UTF_8);
+    public void addWord(String word, String translate) {
+        String urlParameters = "word=" +
+                URLEncoder.encode(word, StandardCharsets.UTF_8) + "&tword=" +
+                URLEncoder.encode(translate, StandardCharsets.UTF_8);
 
         String requestUrl = API_URL + "addword?" + urlParameters;
 
@@ -95,4 +94,6 @@ public class LingualeoClient implements ApiClient {
             logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
+
+
 }

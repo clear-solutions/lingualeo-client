@@ -25,6 +25,10 @@ jar {
     enabled = true
 }
 
+ext {
+	jacksonVersion = '2.13.1'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -32,11 +36,11 @@ dependencies {
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	testImplementation 'org.assertj:assertj-core:3.21.0'
 
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.0'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.0'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
-	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.13.0'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
+	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
 }
 

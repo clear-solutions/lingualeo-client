@@ -1,6 +1,5 @@
 package ltd.clearsolutions.lingualeo.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -17,18 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LingualeoClientIntegrationTest {
 
+    private final LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
     void auth_PutCorrectCredentials_shouldReturnMap() throws IOException {
 
-        LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        InputStream inputFile = getClass().getResourceAsStream("/AuthorizationResponse.json");
-        BufferedReader readFile = null;
-        if (inputFile != null) {
-            readFile = new BufferedReader(new InputStreamReader(inputFile, StandardCharsets.UTF_8));
-        }
+        BufferedReader readFile = getActualResultFromFile("/response/authorizationResponse.json");
 
         Map<String, Object> actual = objectMapper.readValue(readFile,
                 new TypeReference<>() {
@@ -39,38 +33,24 @@ class LingualeoClientIntegrationTest {
     }
 
     @Test
-    void auth_PutIncorrectCredentials_shouldReturnMap() throws JsonProcessingException {
+    void auth_PutIncorrectCredentials_shouldReturnMap() throws IOException {
 
-        LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "645644Df");
+        LingualeoClient wrongLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "645644Df");
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        BufferedReader readFile = getActualResultFromFile("/response/authorizationError.json");
 
-        String fromApi = """
-                {
-                  "error_code": 404,
-                  "error_msg": "Incorrect authorization data"
-                }""";
-
-        Map<String, Object> actual = objectMapper.readValue(fromApi,
+        Map<String, Object> actual = objectMapper.readValue(readFile,
                 new TypeReference<>() {
                 });
 
-        Map<String, Object> expected = lingualeoClient.auth();
+        Map<String, Object> expected = wrongLingualeoClient.auth();
         assertEquals(actual, expected);
     }
 
     @Test
     void getTranslates_PutCorrectCredentials_DataWordClass() throws IOException {
 
-        LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        InputStream inputFile = getClass().getResourceAsStream("/TranslatesResponse.json");
-        BufferedReader readFile = null;
-        if (inputFile != null) {
-            readFile = new BufferedReader(new InputStreamReader(inputFile, StandardCharsets.UTF_8));
-        }
+        BufferedReader readFile = getActualResultFromFile("/response/translatesResponse.json");
 
         DataWord actual = objectMapper.readValue(readFile, DataWord.class);
 
@@ -78,13 +58,13 @@ class LingualeoClientIntegrationTest {
         assertEquals(actual.translate(), expected);
     }
 
-    @Test
-    void addWord_PutWord_WordInDictionary() {
-        LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
-        String word = "Cat";
-        String translate = "Кот";
-        String context = "Это мой кот.";
-
-        lingualeoClient.addWord(word, translate, context);
+    private BufferedReader getActualResultFromFile(String fileName) {
+        InputStream inputFile = getClass().getResourceAsStream(fileName);
+        BufferedReader readFile = null;
+        if (inputFile != null) {
+            readFile = new BufferedReader(new InputStreamReader(inputFile, StandardCharsets.UTF_8));
+        }
+        return readFile;
     }
+
 }

@@ -10,5 +10,5 @@ public interface ApiClient {
 
     List<TranslatedWord> getTranslates(String word) throws AuthenticationException;
 
-    void addWord(String word, String translate, String context) throws AuthenticationException;
+    void addWord(String word, String translate) throws AuthenticationException;
 }
