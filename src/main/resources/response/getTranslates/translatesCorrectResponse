@@ -4,7 +4,7 @@
   "directionEnglish": false,
   "id": null,
   "is_user": 0,
-  "sound_url": "https://audiocdn.lingualeo.com/v2/0/Y2F01bb80f23.mp3",
+  "sound_url": "https://audiocdn.lingualeo.com/v2/3/Y2F06fbc9f7e.mp3",
   "srcLang": 0,
   "status": "ok",
   "transcription": "kæt",
@@ -32,13 +32,13 @@
       "tr": "кот",
       "translate_value": "кот",
       "twordId": "136524815",
-      "ut": 1,
+      "ut": null,
       "value": "кот",
       "votes": 10331080,
       "vt": 10331080
     }
   ],
-  "translation": "кот",
+  "translation": "кошка",
   "wordLemmaId": 7253,
   "wordLemmaValue": "cat",
   "word_forms": [

@@ -1,0 +1,40 @@
+{
+  "apiVersion": "1.0.0",
+  "destLang": 1,
+  "directionEnglish": false,
+  "id": null,
+  "is_user": 0,
+  "sound_url": "https://audiocdn.lingualeo.com/v2/3/0JrQvtGCMQ==3067d5cb.mp3",
+  "srcLang": 0,
+  "status": "ok",
+  "transcription": "",
+  "translate": [
+    {
+      "id": 0,
+      "is_user": null,
+      "pic_url": "",
+      "pos": null,
+      "pr": "user",
+      "tr": "Кот1",
+      "translate_value": "Кот1",
+      "twordId": null,
+      "ut": 0,
+      "value": "Кот1",
+      "votes": 0,
+      "vt": 0
+    }
+  ],
+  "translation": "Кот1",
+  "wordLemmaId": null,
+  "wordLemmaValue": null,
+  "word_forms": [
+    {
+      "type": "",
+      "word": "Кот1"
+    }
+  ],
+  "word_id": null,
+  "word_top": 0,
+  "word_type": 1,
+  "word_value": "Кот1"
+}
