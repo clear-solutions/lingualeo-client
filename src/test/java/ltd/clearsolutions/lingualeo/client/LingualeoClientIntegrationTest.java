@@ -1,6 +1,5 @@
 package ltd.clearsolutions.lingualeo.client;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
@@ -10,61 +9,102 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LingualeoClientIntegrationTest {
 
-    private final LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+    ObjectMapper objectMapper = new ObjectMapper();
 
+    //todo
     @Test
-    void auth_PutCorrectCredentials_shouldReturnMap() throws IOException {
-
-        BufferedReader readFile = getActualResultFromFile("/response/authorizationResponse.json");
-
-        Map<String, Object> actual = objectMapper.readValue(readFile,
-                new TypeReference<>() {
-                });
-
-        Map<String, Object> expected = lingualeoClient.auth();
-        assertEquals(actual, expected);
+    void auth_PutCorrectCredentials_True() {
+        lingualeoClient.auth();
     }
 
     @Test
-    void auth_PutIncorrectCredentials_shouldReturnMap() throws IOException {
-
-        LingualeoClient wrongLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "645644Df");
-
-        BufferedReader readFile = getActualResultFromFile("/response/authorizationError.json");
-
-        Map<String, Object> actual = objectMapper.readValue(readFile,
-                new TypeReference<>() {
-                });
-
-        Map<String, Object> expected = wrongLingualeoClient.auth();
-        assertEquals(actual, expected);
+    void auth_PutIncorrectCredentials_False() {
+        LingualeoClient lingualeoClient = new LingualeoClient("vasyll.danyleil.com", "64");
+        lingualeoClient.auth();
     }
 
     @Test
-    void getTranslates_PutCorrectCredentials_DataWordClass() throws IOException {
+    void auth_PutEmptyCredentials_False() {
+        LingualeoClient lingualeoClient = new LingualeoClient("", "");
+        lingualeoClient.auth();
+    }
 
-        BufferedReader readFile = getActualResultFromFile("/response/translatesResponse.json");
+    @Test
+    void auth_PutNotTheLatinAlphabetCredentials_False() {
+        LingualeoClient lingualeoClient = new LingualeoClient("xaxaxa", "ухаха");
+        lingualeoClient.auth();
+    }
 
-        DataWord actual = objectMapper.readValue(readFile, DataWord.class);
+    // Completed.
+    @Test
+    void getTranslates_PutCorrectWord_DataWordClass() throws IOException {
+        DataWord actual = getActualResultFromFile("/response/getTranslates/translatesCorrectResponse");
 
         List<TranslatedWord> expected = lingualeoClient.getTranslates("Cat");
         assertEquals(actual.translate(), expected);
     }
 
-    private BufferedReader getActualResultFromFile(String fileName) {
+    @Test
+    void getTranslates_PutIncorrectWord_DataWordClass() throws IOException {
+
+        DataWord actual = getActualResultFromFile("/response/getTranslates/translatesIncorrectResponse");
+
+        List<TranslatedWord> expected = lingualeoClient.getTranslates("fdsafasdafasdf");
+        assertEquals(actual.translate(), expected);
+    }
+
+    @Test
+    void getTranslates_PutNotTheLatinAlphabetWord_DataWordClass() throws IOException {
+
+        DataWord actual = getActualResultFromFile("/response/getTranslates/translatesNotTheLatinAlphabetResponse");
+
+        List<TranslatedWord> expected = lingualeoClient.getTranslates("Кот1");
+        assertEquals(actual.translate(), expected);
+    }
+
+    @Test
+    void getTranslates_PutEmptyWord_DataWordClass() throws IOException {
+
+        DataWord actual = getActualResultFromFile("/response/getTranslates/translatesEmptyResponse");
+
+        List<TranslatedWord> expected = lingualeoClient.getTranslates("");
+        assertEquals(actual.translate(), expected);
+    }
+
+    // todo
+    @Test
+    void addWord_PutCorrectWord_True() {
+
+    }
+
+    @Test
+    void addWord_PutIncorrectWord_True() {
+
+    }
+
+    @Test
+    void addWord_PutNotTheLatinAlphabetWord_True() {
+
+    }
+
+    @Test
+    void addWord_PutEmptyWord_True() {
+
+    }
+
+    private DataWord getActualResultFromFile(String fileName) throws IOException {
         InputStream inputFile = getClass().getResourceAsStream(fileName);
         BufferedReader readFile = null;
         if (inputFile != null) {
             readFile = new BufferedReader(new InputStreamReader(inputFile, StandardCharsets.UTF_8));
         }
-        return readFile;
-    }
 
+        return objectMapper.readValue(readFile, DataWord.class);
+    }
 }
