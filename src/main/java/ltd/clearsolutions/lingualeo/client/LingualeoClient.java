@@ -1,16 +1,14 @@
 package ltd.clearsolutions.lingualeo.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.ParseException;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.cookie.ClientCookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 
@@ -32,7 +31,7 @@ public class LingualeoClient implements ApiClient {
 
     private final String email;
     private final String password;
-    private HttpClientContext authContext;
+    HttpClientContext authCookie;
 
     public LingualeoClient(String email, String password) {
         this.email = email;
@@ -40,28 +39,31 @@ public class LingualeoClient implements ApiClient {
     }
 
     @Override
-    public void auth() {
+    public String auth() {
 
         String urlParameters = "email=" + email + "&password=" + password;
         String requestUrl = API_URL + "login" + "?" + urlParameters;
 
         BasicCookieStore cookieStore = new BasicCookieStore();
-        BasicClientCookie cookie = new BasicClientCookie("custom_cookie", "main_value");
-        cookie.setDomain(API_URL);
-        cookie.setAttribute(ClientCookie.DOMAIN_ATTR, "true");
-        cookie.setPath("/");
-        cookieStore.addCookie(cookie);
 
         HttpClientContext context = HttpClientContext.create();
         context.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
 
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             client.execute(new HttpGet(requestUrl), context);
-            authContext = context;
+
+            if (context.getCookieStore().getCookies().equals(Collections.emptyList())) {
+                throw new NullPointerException();
+            }
+
+            this.authCookie = context;
+            return context.getCookieStore().getCookies().get(0).getValue();
 
         } catch (IOException e) {
             logger.info((Marker) Level.WARNING, e.getMessage());
         }
+
+        return "";
     }
 
     @Override
@@ -87,7 +89,7 @@ public class LingualeoClient implements ApiClient {
     }
 
     @Override
-    public void addWord(String word, String translate) {
+    public Map<String, Object> addWord(String word, String translate) {
 
         String urlParameters = "word=" +
                 URLEncoder.encode(word, StandardCharsets.UTF_8) + "&tword=" +
@@ -95,18 +97,18 @@ public class LingualeoClient implements ApiClient {
         String requestUrl = API_URL + "addword?" + urlParameters;
 
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            client.execute(new HttpGet(requestUrl), authContext);
+            CloseableHttpResponse response = client.execute(new HttpGet(requestUrl), authCookie);
 
-            CookieStore cookieStore = authContext.getCookieStore();
-            cookieStore.getCookies()
-                    .stream()
-                    .peek(cookie -> logger.info("cookie name:{}", cookie.getName()))
-                    .filter(cookie -> "custom_cookie".equals(cookie.getName()))
-                    .findFirst()
-                    .orElseThrow(IllegalStateException::new);
+            String body = EntityUtils.toString(response.getEntity());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            return objectMapper.readValue(body, new TypeReference<>() {
+            });
 
         } catch (IOException e) {
             logger.info((Marker) Level.WARNING, e.getMessage());
         }
+        return Collections.emptyMap();
     }
 }

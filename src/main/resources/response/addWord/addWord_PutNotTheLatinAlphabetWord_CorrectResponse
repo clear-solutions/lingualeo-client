@@ -1,0 +1,29 @@
+{
+  "added_translate_count": 1,
+  "apiVersion": "1.0.0",
+  "context_id": 0,
+  "context_text": null,
+  "error_msg": "",
+  "from_syntrans_id": null,
+  "is_new": 0,
+  "is_user_word_created": 1,
+  "lang": {
+    "current": "en",
+    "target": "ru"
+  },
+  "lemmas": [],
+  "sound_url": "https://audiocdn.lingualeo.com/v2/44/0L/QvtC70L7QttC40YLRjA==7e3af268.mp3",
+  "speech_part_id": 0,
+  "status": "ok",
+  "to_syntrans_id": null,
+  "translate_auto": 0,
+  "translate_id": 1073774613,
+  "translate_value": "put",
+  "word_id": null,
+  "word_rank": 0,
+  "word_top": 0,
+  "word_type": 1,
+  "word_user_cdate": null,
+  "word_value": "Положить",
+  "xpAdded": 1
+}
