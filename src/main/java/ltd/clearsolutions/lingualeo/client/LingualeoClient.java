@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -39,7 +40,7 @@ public class LingualeoClient implements ApiClient {
     }
 
     @Override
-    public String auth() {
+    public void auth() {
 
         String urlParameters = "email=" + email + "&password=" + password;
         String requestUrl = API_URL + "login" + "?" + urlParameters;
@@ -52,18 +53,12 @@ public class LingualeoClient implements ApiClient {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             client.execute(new HttpGet(requestUrl), context);
 
-            if (context.getCookieStore().getCookies().equals(Collections.emptyList())) {
-                throw new NullPointerException();
-            }
-
             this.authCookie = context;
-            return context.getCookieStore().getCookies().get(0).getValue();
 
         } catch (IOException e) {
             logger.info((Marker) Level.WARNING, e.getMessage());
         }
 
-        return "";
     }
 
     @Override
@@ -103,7 +98,7 @@ public class LingualeoClient implements ApiClient {
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-            return objectMapper.readValue(body, new TypeReference<>() {
+            return objectMapper.readValue(body, new TypeReference<HashMap<String, Object>>() {
             });
 
         } catch (IOException e) {

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ApiClient {
 
-    String auth() throws AuthenticationException;
+    void auth() throws AuthenticationException;
 
     List<TranslatedWord> getTranslates(String word) throws AuthenticationException;
 
