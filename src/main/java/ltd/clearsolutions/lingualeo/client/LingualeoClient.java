@@ -58,7 +58,6 @@ public class LingualeoClient implements ApiClient {
         } catch (IOException e) {
             logger.info((Marker) Level.WARNING, e.getMessage());
         }
-
     }
 
     @Override
