@@ -1,24 +1,63 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.1'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
 group = 'ltd.clearsolutions'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 repositories {
-	mavenCentral()
+    mavenCentral()
+}
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'com.github.tomakehurst:wiremock-jre8:2.32.0'
-
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.32.0'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/clear-solutions/lingualeo-client")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
 }
