@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 
-public class LingualeoClient implements ApiClient {
+public class LingualeoClient implements Lingualeo {
 
     private static final Logger logger = LoggerFactory.getLogger(LingualeoClient.class);
 
