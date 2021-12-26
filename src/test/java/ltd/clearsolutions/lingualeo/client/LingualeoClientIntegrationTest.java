@@ -19,6 +19,7 @@ class LingualeoClientIntegrationTest {
 
         List<Cookie> actual = correctLingualeoClient.authCookie.getCookieStore().getCookies();
 
+        assertEquals(1, actual.size());
         assertEquals("lingualeo.com", actual.get(0).getDomain());
         assertEquals("remember", actual.get(0).getName());
         assertEquals("31536000", ((BasicClientCookie) actual.get(0)).getAttribute("max-age"));
@@ -51,6 +52,7 @@ class LingualeoClientIntegrationTest {
 
         List<TranslatedWord> actual = correctLingualeoClient.getTranslates("Set");
 
+        assertEquals(5, actual.size());
         assertEquals("положить", actual.get(0).value());
         assertEquals(24201, actual.get(0).votes());
         assertEquals(16, actual.get(0).id());
@@ -62,6 +64,7 @@ class LingualeoClientIntegrationTest {
 
         List<TranslatedWord> actual = correctLingualeoClient.getTranslates("fdsafasdafasdf");
 
+        assertEquals(1, actual.size());
         assertEquals("фдсафасдафасдф", actual.get(0).value());
         assertEquals(0, actual.get(0).votes());
         assertEquals(0, actual.get(0).id());
