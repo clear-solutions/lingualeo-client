@@ -111,11 +111,12 @@ class LingualeoClientIntegrationTest {
                 });
 
         Map<String, Object> actual = correctLingualeoClient.addWord("fdasfdfasdf", "фдасфдфасдф");
-        assertEquals(expected.get("added_translate_count"), actual.get("added_translate_count"));
-        assertEquals(expected.get("lang"), actual.get("lang"));
-        assertEquals(expected.get("translate_id"), actual.get("translate_id"));
-        assertEquals(expected.get("translate_value"), actual.get("translate_value"));
-        assertEquals(expected.get("word_value"), actual.get("word_value"));
+        assertEquals("фдасфдфасдф", actual.get("translate_value"));
+        assertEquals("fdasfdfasdf", actual.get("word_value"));
+        assertEquals(1, actual.get("added_translate_count"));
+        assertEquals("en", ((Map) actual.get("lang")).get("current"));
+        assertEquals("ru", ((Map) actual.get("lang")).get("target"));
+        assertEquals(0, actual.get("translate_id"));
     }
 
     private <T> T getActualResultFromFile(String fileName, TypeReference<T> T) throws IOException {
