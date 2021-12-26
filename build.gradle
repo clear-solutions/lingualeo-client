@@ -31,9 +31,6 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-test'
-
-	implementation "com.github.tomakehurst:wiremock-jre8:2.32.0"
 
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
@@ -47,6 +44,9 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "com.github.tomakehurst:wiremock-jre8:2.32.0"
 
 }
 
