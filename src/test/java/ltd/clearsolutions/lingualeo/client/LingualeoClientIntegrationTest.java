@@ -105,15 +105,10 @@ class LingualeoClientIntegrationTest {
     void addWord_PutIncorrectWord_WordAdditionData() throws IOException {
         LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
         correctLingualeoClient.auth();
-
-        Map<String, Object> expected = getActualResultFromFile("/response/addWord/addWord_PutIncorrectWordIfMissing_CorrectResponse.json",
-                new TypeReference<>() {
-                });
-
         Map<String, Object> actual = correctLingualeoClient.addWord("fdasfdfasdf", "фдасфдфасдф");
         assertEquals("фдасфдфасдф", actual.get("translate_value"));
         assertEquals("fdasfdfasdf", actual.get("word_value"));
-        assertEquals(1, actual.get("added_translate_count"));
+        assertEquals(2, actual.get("added_translate_count"));
         assertEquals("en", ((Map) actual.get("lang")).get("current"));
         assertEquals("ru", ((Map) actual.get("lang")).get("target"));
         assertEquals(0, actual.get("translate_id"));
