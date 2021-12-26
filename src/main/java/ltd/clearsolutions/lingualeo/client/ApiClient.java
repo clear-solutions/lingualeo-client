@@ -8,7 +8,7 @@ public interface ApiClient {
 
     void auth() throws AuthenticationException;
 
-    List<TranslatedWord> getTranslates(String word) throws AuthenticationException;
+    List<TranslatedWord> getTranslates(String word);
 
-    Map<String, Object> addWord(String word, String translate) throws AuthenticationException;
+    Map<String, Object> addWord(String word, String translate);
 }

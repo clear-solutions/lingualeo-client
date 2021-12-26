@@ -2,6 +2,7 @@ package ltd.clearsolutions.lingualeo.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.cookie.Cookie;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -9,60 +10,82 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class LingualeoClientIntegrationTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
-
-    LingualeoClient IncorrectLingualeoClient;
-
     @Test
-    void auth_PutCorrectCredentials_Cookie() {
-        correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+    void auth_PutCorrectCredentials_ListOfCookies() {
+        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
         correctLingualeoClient.auth();
 
-        assertNotNull(correctLingualeoClient.authCookie);
+        List<Cookie> expected = Collections.emptyList();
+        List<Cookie> actual = correctLingualeoClient.authCookie.getCookieStore().getCookies();
+
+        assertNotEquals(expected, actual);
     }
 
     @Test
-    void auth_PutIncorrectCredentials_Null() {
-        IncorrectLingualeoClient = new LingualeoClient("vasyll.danyleil.com", "64");
-        correctLingualeoClient.auth();
+    void auth_PutIncorrectCredentials_EmptyListOfCookies() {
+        LingualeoClient incorrectLingualeoClient = new LingualeoClient("vasyll.danyleil.com", "64");
+        incorrectLingualeoClient.auth();
 
-        assertNull(IncorrectLingualeoClient.authCookie);
+        List<Cookie> expected = Collections.emptyList();
+        List<Cookie> actual = incorrectLingualeoClient.authCookie.getCookieStore().getCookies();
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void getTranslates_PutCorrectWord_DataWordClass() throws IOException {
+    void auth_PutCorrectCredentialsIfUserNotRegistered_EmptyListOfCookies() {
+        LingualeoClient incorrectLingualeoClient = new LingualeoClient("pillowBed@gmail.com", "onthebad247");
+        incorrectLingualeoClient.auth();
+
+        List<Cookie> expected = Collections.emptyList();
+        List<Cookie> actual = incorrectLingualeoClient.authCookie.getCookieStore().getCookies();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getTranslates_PutCorrectWord_WordTranslationDataList() throws IOException {
+        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+
         DataWord expected = getActualResultFromFile("/response/getTranslates/getTranslates_PutCorrectWord_CorrectResponse.json",
                 new TypeReference<>() {
                 });
 
         List<TranslatedWord> actual = correctLingualeoClient.getTranslates("Set");
-        assertEquals(expected.translate(), actual);
+
+        assertEquals(expected.translate().get(0).value(), actual.get(0).value());
+        assertEquals(expected.translate().get(0).votes(), actual.get(0).votes());
     }
 
     @Test
-    void getTranslates_PutIncorrectWord_DataWordClass() throws IOException {
+    void getTranslates_PutIncorrectWord_WordTranslationDataList() throws IOException {
+        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
 
-        DataWord actual = getActualResultFromFile("/response/getTranslates/getTranslates_PutIncorrectWord_CorrectResponse.json",
+        DataWord expected = getActualResultFromFile("/response/getTranslates/getTranslates_PutIncorrectWord_CorrectResponse.json",
                 new TypeReference<>() {
                 });
 
-        List<TranslatedWord> expected = correctLingualeoClient.getTranslates("fdsafasdafasdf");
-        assertEquals(actual.translate(), expected);
+        List<TranslatedWord> actual = correctLingualeoClient.getTranslates("fdsafasdafasdf");
+
+        assertEquals(expected.translate().get(0).value(), actual.get(0).value());
+        assertEquals(expected.translate().get(0).votes(), actual.get(0).votes());
     }
 
 
     @Test
-    void addWord_PutCorrectWordIfMissing_MapStringObject() throws IOException {
-
+    void addWord_PutCorrectWord_WordAdditionData() throws IOException {
+        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
         correctLingualeoClient.auth();
 
         Map<String, Object> expected = getActualResultFromFile("/response/addWord/addWord_PutCorrectWordIfMissing_CorrectResponse.json",
@@ -70,12 +93,17 @@ class LingualeoClientIntegrationTest {
                 });
 
         Map<String, Object> actual = correctLingualeoClient.addWord("Set", "Положить");
+
         assertEquals(expected.get("added_translate_count"), actual.get("added_translate_count"));
         assertEquals(expected.get("lang"), actual.get("lang"));
+        assertEquals(expected.get("translate_id"), actual.get("translate_id"));
+        assertEquals(expected.get("translate_value"), actual.get("translate_value"));
+        assertEquals(expected.get("word_value"), actual.get("word_value"));
     }
 
     @Test
-    void addWord_PutIncorrectWordIfMissing_MapStringObject() throws IOException {
+    void addWord_PutIncorrectWord_WordAdditionData() throws IOException {
+        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
         correctLingualeoClient.auth();
 
         Map<String, Object> expected = getActualResultFromFile("/response/addWord/addWord_PutIncorrectWordIfMissing_CorrectResponse.json",
@@ -85,6 +113,9 @@ class LingualeoClientIntegrationTest {
         Map<String, Object> actual = correctLingualeoClient.addWord("fdasfdfasdf", "фдасфдфасдф");
         assertEquals(expected.get("added_translate_count"), actual.get("added_translate_count"));
         assertEquals(expected.get("lang"), actual.get("lang"));
+        assertEquals(expected.get("translate_id"), actual.get("translate_id"));
+        assertEquals(expected.get("translate_value"), actual.get("translate_value"));
+        assertEquals(expected.get("word_value"), actual.get("word_value"));
     }
 
     private <T> T getActualResultFromFile(String fileName, TypeReference<T> T) throws IOException {
