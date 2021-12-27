@@ -3,19 +3,19 @@ package ltd.clearsolutions.lingualeo.client;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.junit.jupiter.api.Test;
-import ltd.clearsolutions.lingualeo.client.LingualeoClient;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.System.getenv;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LingualeoClientIntegrationTest {
 
     @Test
     void auth_PutCorrectCredentials_ListOfCookies() {
-        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+        LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
         correctLingualeoClient.auth();
 
         List<Cookie> actual = correctLingualeoClient.authCookie.getCookieStore().getCookies();
@@ -49,7 +49,7 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void getTranslates_PutCorrectWord_WordTranslationDataList() {
-        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+        LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
 
         List<TranslatedWord> actual = correctLingualeoClient.getTranslates("Set");
 
@@ -61,7 +61,7 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void getTranslates_PutIncorrectWord_WordTranslationDataList() {
-        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+        LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
 
         List<TranslatedWord> actual = correctLingualeoClient.getTranslates("fdsafasdafasdf");
 
@@ -74,7 +74,7 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void addWord_PutCorrectWord_WordAdditionData() {
-        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+        LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
         correctLingualeoClient.auth();
 
         Map<String, Object> actual = correctLingualeoClient.addWord("Set", "Положить");
@@ -89,7 +89,7 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void addWord_PutIncorrectWord_WordAdditionData() {
-        LingualeoClient correctLingualeoClient = new LingualeoClient("vasyll.danylenko@gmail.com", "6485644Df");
+        LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
         correctLingualeoClient.auth();
         Map<String, Object> actual = correctLingualeoClient.addWord("fdasfdfasdf", "фдасфдфасдф");
 
