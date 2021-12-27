@@ -15,6 +15,8 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void auth_PutCorrectCredentials_ListOfCookies() {
+        System.out.println("LINGUOLEO_USERNAME ::: " + getenv("LINGUOLEO_USERNAME"));
+        System.out.println("LINGUOLEO_PASSWORD ::: " + getenv("LINGUOLEO_PASSWORD"));
         LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
         correctLingualeoClient.auth();
 
