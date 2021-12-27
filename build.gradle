@@ -4,10 +4,11 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id 'idea'
 }
 
 group = 'ltd.clearsolutions'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '17'
 
 java {
@@ -16,7 +17,7 @@ java {
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 bootJar {
     enabled = false
@@ -26,31 +27,40 @@ jar {
 }
 
 ext {
-	jacksonVersion = '2.13.1'
+    httpclientVersion = '4.5.13'
+    commonsloggingVersion = '1.2'
+    jacksonVersion = '2.13.1'
+    slf4jVersion = '1.7.32'
+    logbackVersion = '1.2.10'
+    junitVersion = '5.8.2'
+    assertjVersion = '3.21.0'
+    wiremockVersion = '2.32.0'
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+    implementation "org.apache.httpcomponents:httpclient:${httpclientVersion}"
+    implementation "commons-logging:commons-logging:${commonsloggingVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
-	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "ch.qos.logback:logback-core:${logbackVersion}"
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
 
-	implementation 'commons-logging:commons-logging:1.2'
-	implementation 'com.google.code.gson:gson:2.8.9'
-
-	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
-	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-
-	testImplementation 'org.assertj:assertj-core:3.21.0'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation "com.github.tomakehurst:wiremock-jre8:2.32.0"
-
+    testImplementation(platform("org.junit:junit-bom:${junitVersion}"))
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "com.github.tomakehurst:wiremock-jre8:${wiremockVersion}"
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 publishing {

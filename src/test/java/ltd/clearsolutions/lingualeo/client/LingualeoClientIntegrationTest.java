@@ -3,6 +3,7 @@ package ltd.clearsolutions.lingualeo.client;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.junit.jupiter.api.Test;
+import ltd.clearsolutions.lingualeo.client.LingualeoClient;
 
 import java.util.Collections;
 import java.util.List;

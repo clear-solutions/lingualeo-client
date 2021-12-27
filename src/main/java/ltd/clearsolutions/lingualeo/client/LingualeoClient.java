@@ -10,9 +10,10 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
+
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -21,7 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 
 public class LingualeoClient implements Lingualeo {
@@ -56,7 +56,7 @@ public class LingualeoClient implements Lingualeo {
             this.authCookie = context;
 
         } catch (IOException e) {
-            logger.info((Marker) Level.WARNING, e.getMessage());
+            logger.warn(e.getMessage());
         }
     }
 
@@ -77,7 +77,7 @@ public class LingualeoClient implements Lingualeo {
             return dataWord.translate();
 
         } catch (IOException | ParseException e) {
-            logger.info((Marker) Level.WARNING, e.getMessage());
+            logger.warn(e.getMessage());
         }
         return Collections.emptyList();
     }
@@ -101,7 +101,7 @@ public class LingualeoClient implements Lingualeo {
             });
 
         } catch (IOException e) {
-            logger.info((Marker) Level.WARNING, e.getMessage());
+            logger.warn(e.getMessage());
         }
         return Collections.emptyMap();
     }
