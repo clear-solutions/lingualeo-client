@@ -29,9 +29,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Tokens
-      run: echo ${{ secrets.LINGUOLEO_PASSWORD2 }}
+      run: echo ${{ secrets.LINGUOLEO_USERNAME }}
     - name: Build with Gradle
-      env:
-        LINGUOLEO_USERNAME: ${{ secrets.LINGUOLEO_PASSWORD2 }}
-      run: LINGUOLEO_USERNAME=${{ secrets.LINGUOLEO_PASSWORD2 }} LINGUOLEO_PASSWORD=6485644Df ./gradlew build
+      run: LINGUOLEO_USERNAME=${{ secrets.LINGUOLEO_USERNAME }} LINGUOLEO_PASSWORD=${{ secrets.LINGUOLEO_PASSWORD }} ./gradlew build
 
