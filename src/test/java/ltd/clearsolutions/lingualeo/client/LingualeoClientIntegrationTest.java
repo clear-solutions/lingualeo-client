@@ -15,14 +15,11 @@ class LingualeoClientIntegrationTest {
 
     @Test
     void auth_PutCorrectCredentials_ListOfCookies() {
-        System.out.println("LINGUOLEO_USERNAME ::: " + getenv("LINGUOLEO_USERNAME"));
-        System.out.println("LINGUOLEO_PASSWORD ::: " + getenv("LINGUOLEO_PASSWORD"));
         LingualeoClient correctLingualeoClient = new LingualeoClient(getenv("LINGUOLEO_USERNAME"), getenv("LINGUOLEO_PASSWORD"));
         correctLingualeoClient.auth();
 
         List<Cookie> actual = correctLingualeoClient.authCookie.getCookieStore().getCookies();
 
-        assertEquals("vasyll.danylenko@gmail.com", getenv("LINGUOLEO_USERNAME"));
         assertEquals(1, actual.size());
         assertEquals("lingualeo.com", actual.get(0).getDomain());
         assertEquals("remember", actual.get(0).getName());
