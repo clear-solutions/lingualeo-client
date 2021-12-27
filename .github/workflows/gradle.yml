@@ -31,4 +31,4 @@ jobs:
     - name: Build with Gradle
       env:
         LINGUOLEO_USERNAME: ${{ secrets.LINGUOLEO_USERNAME }}
-      run: LINGUOLEO_USERNAME=${{ secrets.LINGUOLEO_USERNAME }} LINGUOLEO_PASSWORD=6485644Df ./gradlew build
+      run: LINGUOLEO_USERNAME=env.LINGUOLEO_USERNAME LINGUOLEO_PASSWORD=6485644Df ./gradlew build
