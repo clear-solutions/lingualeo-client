@@ -28,7 +28,7 @@ public class LingualeoClient implements Lingualeo {
 
     private static final Logger logger = LoggerFactory.getLogger(LingualeoClient.class);
 
-    private static final String API_URL = "https://api.lingualeo.com/";
+    private static String API_URL = "https://api.lingualeo.com/";
 
     private final String email;
     private final String password;
@@ -37,6 +37,12 @@ public class LingualeoClient implements Lingualeo {
     public LingualeoClient(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    LingualeoClient(String email, String password, String apiUrl) {
+        this.email = email;
+        this.password = password;
+        API_URL = apiUrl;
     }
 
     @Override
