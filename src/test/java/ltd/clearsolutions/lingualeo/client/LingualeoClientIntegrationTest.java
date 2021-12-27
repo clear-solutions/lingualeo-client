@@ -22,6 +22,7 @@ class LingualeoClientIntegrationTest {
 
         List<Cookie> actual = correctLingualeoClient.authCookie.getCookieStore().getCookies();
 
+        assertEquals("vasyll.danylenko@gmail.com", getenv("LINGUOLEO_USERNAME"));
         assertEquals(1, actual.size());
         assertEquals("lingualeo.com", actual.get(0).getDomain());
         assertEquals("remember", actual.get(0).getName());
