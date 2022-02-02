@@ -1,3 +1,5 @@
+[![Java CI with Gradle](https://github.com/clear-solutions/lingualeo-client/actions/workflows/gradle.yml/badge.svg)](https://github.com/clear-solutions/lingualeo-client/actions/workflows/gradle.yml)
+
 # LingualeoClient
 
 ## _Client for adding words to the dictionary https://lingualeo.com_
